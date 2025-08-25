@@ -2,6 +2,7 @@
 FROM --platform=$TARGETPLATFORM golang:1.21-alpine AS builder
 ARG TARGETARCH
 ARG TARGETOS
+LABEL org.opencontainers.image.description="Simple echo app used for demos based on echo-http."
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
