@@ -9,6 +9,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o http-echo main.go
 
 FROM gcr.io/distroless/static:nonroot-$TARGETARCH
+LABEL org.opencontainers.image.description="Simple echo app used for demos based on echo-http."
 WORKDIR /
 COPY --from=builder /src/http-echo .
 EXPOSE 8080
