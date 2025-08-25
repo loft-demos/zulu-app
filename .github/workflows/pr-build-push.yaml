@@ -29,16 +29,17 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          annotations: |
+            org.opencontainers.image.description=Simple echo app used for demos based on echo-http.
           labels: |
             org.opencontainers.image.revision=${{ github.event.pull_request.head.sha }}
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.vendor=vcluster.com
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.description=Simple echo app based on the HashiCorp echo-http.
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to DockerHub
@@ -59,6 +60,7 @@ jobs:
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }} # manifest-level annotations
   wakeup-vcluster:
     if: contains(github.event.pull_request.labels.*.name, 'create-pr-vcluster-external-argocd')
     runs-on: ubuntu-latest
