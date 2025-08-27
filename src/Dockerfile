@@ -15,3 +15,4 @@ COPY --from=builder /src/http-echo .
 EXPOSE 8080
 ENTRYPOINT ["/http-echo"]
 
+
